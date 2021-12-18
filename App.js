@@ -7,10 +7,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-community/async-storage';
 import { createStore, StoreProvider, useStoreState, useStoreActions } from 'easy-peasy';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 /** Screens */
@@ -25,12 +25,13 @@ const App = () => {
       <NavigationContainer>
         <TabStack.Navigator
           tabBarOptions={{
-            activeBackgroundColor: "#DDDDDD",
             inactiveBackgroundColor: "#FFFFFF",
             activeTintColor: '#e91e63',
-            labelStyle: {
-              fontSize: 16,
-            },
+            labelStyle: {        
+              fontSize: 15,        
+              lineHeight: 16,        
+              fontFamily: "Rubik_Regular"      
+             },
             style: {
               height: 60,
             },
@@ -44,8 +45,8 @@ const App = () => {
             component={UploadScreen}
             options={{
               tabBarLabel: 'UPLOAD',
-              tabBarIcon: () => (
-                <MaterialCommunityIcons name="cloudupload" color={"#fffff"} size={10} />
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons name='cloud-upload' size={30} color={color} />
               ),
             }}
           />
@@ -54,8 +55,8 @@ const App = () => {
             component={DownloadScreen}
             options={{
               tabBarLabel: 'DOWNLOAD',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="clouddownload" color={"#fffff"} size={10} />
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons name='cloud-download' size={30} color={color} />
               ),
             }}
           />
@@ -64,6 +65,4 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
-
 export default App;
-const Style = StyleSheet.create();
