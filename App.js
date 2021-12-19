@@ -16,22 +16,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 /** Screens */
 import UploadScreen from './src/screens/UploadScreen';
 import DownloadScreen from './src/screens/DownloadScreen';
+import HeaderComponent from './src/Components/HeaderComponent';
 
 const TabStack = createBottomTabNavigator();
 
 const App = () => {
   return (
     <SafeAreaProvider>
+      <HeaderComponent />
       <NavigationContainer>
         <TabStack.Navigator
           tabBarOptions={{
             inactiveBackgroundColor: "#FFFFFF",
             activeTintColor: '#e91e63',
-            labelStyle: {        
-              fontSize: 15,        
-              lineHeight: 16,        
-              fontFamily: "Rubik_Regular"      
-             },
+            labelStyle: {
+              fontSize: 15,
+              lineHeight: 16,
+              fontFamily: "Rubik_Regular"
+            },
             style: {
               height: 60,
             },
