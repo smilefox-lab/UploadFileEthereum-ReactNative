@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
 import { View, Text, Button, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import DocumentPicker from 'react-native-document-picker';
+import 'react-native-gesture-handler';
+
+// const createIpfs =  require('ipfs-http-client');
+// const ipfs = createIpfs('https://ipfs.infura.io:5001/api/v0')
 
 const UploadScreen = () => {
     const [singleFile, setSingleFile] = useState(null);
-    const connectWallet = () => {
-        alert('connectWallet button clicked!');
+    const [pagehash, setPagehash] = useState('');
+    let connectWallet = () => {
+        Alert.alert('connectWallet button clicked!');
     }
-    const selectFile = async () => {
-        Alert.alert('select button clicked!');
+    let selectFile = async () => {
         try {
             const res = await DocumentPicker.pick({
                 // Provide which type of file you want user to pick
                 type: [DocumentPicker.types.allFiles],
             });
-            // Printing the log realted to the file
-            Alert.alert('res : ' + JSON.stringify(res));
             // Setting the state to show single file attributes
             setSingleFile(res);
+            uploadFile();
         } catch (err) {
             setSingleFile(null);
             // Handling any exception (If any)
@@ -31,10 +34,21 @@ const UploadScreen = () => {
             }
         }
     }
+    let uploadFile = async () => {
+        try {
+            // const added = await ipfs.add(singleFile)
+            // const obtainpagehash = `${added.path}`
+            // setPagehash(obtainpagehash)
+            // console.log('sending ' + obtainpagehash + ' to the contract');
+            // contract.set(obtainpagehash);
+        } catch (error) {
+            console.log('Error uploading file: ', error)
+        }
+    }
     return (
         <View style={styles.containerAll}>
             <View style={styles.containerWalletBtn}>
-                <TouchableOpacity style={styles.walletButton} onPress={() => { connectWallet }}>
+                <TouchableOpacity style={styles.walletButton} onPress={() => { connectWallet() }}>
                     <Text style={styles.btnText}>
                         Connect Wallet
                     </Text>
@@ -44,7 +58,7 @@ const UploadScreen = () => {
                 <Text style={styles.headerText}>
                     Select your document to be uploaded to Ethereum Blockchain
                 </Text>
-                <TouchableOpacity style={styles.fileButton} onPress={() => { selectFile }}>
+                <TouchableOpacity style={styles.fileButton} onPress={() => { selectFile() }}>
                     <Text style={styles.btnText}>
                         Select File
                     </Text>
@@ -52,8 +66,11 @@ const UploadScreen = () => {
             </View>
             <View style={styles.containerOut}>
                 <Text style={styles.headerText}>
-                    Output
+                    Output:
                     IPFS Hash Stored on Eth Contract (Pls keep it safe):
+                </Text>
+                <Text>
+                QmNN4gKj1L7ov68H7YEZ8tP6LpEnbSJQZm3w193BdSjrW3
                 </Text>
             </View>
         </View>
@@ -75,6 +92,7 @@ const styles = StyleSheet.create({
     containerForm: {
         paddingTop: 20,
         borderTopWidth: 1,
+        paddingBottom: 20,
     },
     containerOut: {
         flex: 1,
@@ -98,7 +116,6 @@ const styles = StyleSheet.create({
     },
     fileButton: {
         marginTop: 20,
-        marginBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,

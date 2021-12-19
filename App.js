@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import {
+  Alert,
   StatusBar, StyleSheet, TouchableOpacity
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,6 +22,9 @@ import HeaderComponent from './src/Components/HeaderComponent';
 const TabStack = createBottomTabNavigator();
 
 const App = () => {
+  useEffect(() => {
+    Alert.alert('WELCOME EthProcess');
+  });
   return (
     <SafeAreaProvider>
       <HeaderComponent />

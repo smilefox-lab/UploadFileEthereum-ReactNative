@@ -1,22 +1,64 @@
-import React, { useState } from 'react'
-import { View, Text, Button, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native'
-// import ipfs from '../../utils/ipfs'
-// import web3 from '../../utils/web3'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Button, TextInput, Alert, StyleSheet, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import 'react-native-gesture-handler';
 
 const DownloadScreen = () => {
     const [curfile, setCurfile] = useState('');
-
-    const btnClick = async () => {
-        console.log('file.path');
-        Alert.alert('download button clicked!');
+    useEffect(() => {
+        request_storage_runtime_permission();
+    })
+    let request_storage_runtime_permission = async () => {
         try {
-            // for await (const file of ipfs.get(curfile)) {
-            // console.log(file.path)
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    'title': 'ReactNativeCode Storage Permission',
+                    'message': 'ReactNativeCode App needs access to your storage to download Photos.'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+                Alert.alert("Storage Permission Granted.");
+            }
+            else {
+
+                Alert.alert("Storage Permission Not Granted");
+
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+    let getExtention = (filename) => {
+        return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) :
+            undefined;
+    }
+    const fileDownload = async () => {
+        if (!curfile) {
+            Alert.alert("Please enter hash key for the document to download!");
+            return;
+        }
+        try {
+            var date = new Date();
+            var image_URL = "https://ipfs.io/ipfs/" + curfile;
+            var ext = getExtention(image_URL);
+            ext = "." + ext[0];
+            const { config, fs } = RNFetchBlob;
+            let PictureDir = fs.dirs.PictureDir
+            let options = {
+                fileCache: true,
+                addAndroidDownloads: {
+                    useDownloadManager: true,
+                    notification: true,
+                    path: PictureDir + "/image_" + Math.floor(date.getTime()
+                        + date.getSeconds() / 2) + ext,
+                    description: 'Image'
+                }
+            }
+            config(options).fetch('GET', image_URL).then((res) => {
+                Alert.alert("Image Downloaded Successfully.");
+            });
             console.log('file.path');
-            // for await (const chunk of file.content) {
-            // content.append(chunk)
-            // }
-            // }
         } catch (error) {
             console.log(error);
         }
@@ -32,15 +74,13 @@ const DownloadScreen = () => {
                         onChangeText={setCurfile}
                         placeholder="Input file PrivateKey!"
                     />
-                    <TouchableOpacity style={styles.button} onPress={() => { btnClick }}>
+                    <TouchableOpacity style={styles.button} onPress={() => { fileDownload() }}>
                         <Text style={styles.btnText}>
                             Download
                         </Text>
                     </TouchableOpacity>
-                    <Text>
-                        {curfile}
-                    </Text>
                 </View>
+
             </View>
         </View>
     )
@@ -56,7 +96,6 @@ const styles = StyleSheet.create({
     containerBelow: {
         paddingTop: 30,
         paddingRight: 30,
-        flex: 5,
         flexDirection: 'row',
     },
     headerText: {
